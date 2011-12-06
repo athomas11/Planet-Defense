@@ -16,52 +16,65 @@ import javax.media.opengl.GL2;
 
 public class AlienShip extends GameObject {
         public boolean start = true;    
-        public double placement = 600;
-        private final double[] START_POS = {random(100,100), random(100,0), placement}; //Will Make Random
-
+        //public double placement = 600;
+        public double gameTime = 0;
+        
+        public Boolean missile1Fired = false;
+        public Boolean missile2Fired = false;
+        AlienMissile aMiss1;
+        AlienMissile aMiss2;
+        public double zPosition;
         public AlienShip(GL2 gl){
-    
+            aMiss1 = new AlienMissile(gl);
+            aMiss2 = new AlienMissile(gl);
 
         }
-        private double random(double min, double max){
+        
+        public double randomNum(double min, double max){
             Random rand =  new Random();
-            double randomNumber = rand.nextDouble() + min;
+            double randomNumber = min + rand.nextDouble()*max - max/2;
+            System.out.println(randomNumber);
             return randomNumber;
-            //double num = 0;
-            //return num;
-           //return min + (int)(Math.random() * ((max - min) + 1));
         }
+        public double placement = randomNum(700,1000);
+
         private void initializeVectors() {
 
-            position = new double[]{START_POS[0], START_POS[1], START_POS[2]};
+
         }
 
-        public void display(GL2 gl,GLUquadric SOLID,GLU glu,Texture alienTexture, int number, double xPos, double yPos){
+        public void display(GL2 gl,GLUquadric SOLID,GLU glu,Texture alienTexture, double xPos, double yPos, double zPos){
        
+            zPosition = zPos;
+            
           
-            
-            //gl.glPushMatrix();
-            
             alienTexture.enable(gl);
             alienTexture.bind(gl);
                        
             gl.glPushMatrix();
-            gl.glTranslated(xPos, yPos,placement);//random(0,100),random(0,100),placement);
-            //gl.glTranslated(0,-5,400);
-            
-            
-            //gl.glPushMatrix();
-            gl.glBegin(gl.GL_TRIANGLES);
+
+            gl.glTranslated(xPos, yPos, placement + 600);
+
+            gl.glBegin(gl.GL_QUADS);
             gl.glColor3f(1,0,1);
             gl.glVertex3f(0,0,0);
             gl.glVertex3f(0,0,-10);
             gl.glVertex3f(10,0,-10);
-            gl.glVertex3f(0,0,0);
-            gl.glVertex3f(10,0,0);
-            gl.glVertex3f(10,0,-10);
+            gl.glVertex3f(10,0,0);          
+            gl.glEnd();
+            
+            //Missiles
+            gl.glColor3f(1,1,1);
+            gl.glPushMatrix();
+            gl.glTranslatef(2,-0.25f,-10);
+            aMiss1.display(gl, SOLID, glu, alienTexture);
+            gl.glTranslatef(6,0,0);
+            aMiss2.display(gl, SOLID, glu, alienTexture);
+            gl.glPopMatrix();
             
             
             
+            gl.glBegin(gl.GL_TRIANGLES);
             
             gl.glColor3f(1,0,0);
             gl.glVertex3f(10,0,-10);
@@ -77,24 +90,48 @@ public class AlienShip extends GameObject {
             gl.glVertex3f(0,0,-10);
             gl.glVertex3f(10,0,-10);
             gl.glVertex3f(5,5,-5);
-            
+           
             gl.glColor3f(1,1,0);
             gl.glVertex3f(0,0,0);
             gl.glVertex3f(10,0,0);
             gl.glVertex3f(5,5,-5);
-            
+            gl.glEnd();
             
             gl.glColor3f(1,1,1);
             
             gl.glPopMatrix();
             alienTexture.disable(gl);
             
-            //gl.glPopMatrix();
-      // }
+            
         }
         public void update(long delta){
             
                 placement -= 1;
+                gameTime += .0625;
+                if(placement <= -1000){
+                    placement = zPosition;
+                }
+                //System.out.println(gameTime);
+                
+                if(gameTime >= 5 && gameTime <= 8){
+                    missile1Fired = true;
+                    if(gameTime >= 10){
+                        
+                    }
+                }
+                if(gameTime >= 12 && gameTime <= 15){
+                    missile2Fired = true;
+                    if(gameTime >= 10){
+                        
+                    }
+                }
+                if(gameTime >= 25 && gameTime <= 28){
+                    gameTime = 0;
+                }
+                
+                missile1Fired = aMiss1.Update(0, missile1Fired);
+                missile2Fired = aMiss2.Update(0,missile2Fired);
+                
             
         }
 

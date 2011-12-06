@@ -1,14 +1,3 @@
-/*
- * This program uses openGL through the Java OpenGL (JOGL)
- * libraries.  It creates a robot with independent points
- * of rotation at all arm and leg joints, as well as at
- * the hinge of the jaw, and at the bottom of the torso.
- * Each joint is randomly assigned an update value which
- * controls the change in the joint angle during each
- * update.  This ensures that all joints rotate independently.
- * The program can be stopped by pressing the escape key or
- * closing the window.
- */
 package planetDefense;
 import java.io.InputStream;
 import java.awt.BorderLayout;
@@ -80,15 +69,23 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 	private UserShip user;
 	private Texture earth;
         private Texture asteroidTexture;
+        private Texture randomTexture;
+        private Texture starTexture;
+        private StarScape Starscape;
         GLProfile glp = GLProfile.getDefault();
-        private Asteroid asteroid;
+        //private Asteroid asteroid;
         private AlienShip alienShip;
         public int asteroidNumber = 1;
         public double gameTime = 0;
-        double xRand = randomNum(-100, 100);
-        double yRand = randomNum(-10, 10);
-        double xRand1 = randomNum(-100, 100);
-        double yRand1 = randomNum(-10, 10);
+        public int NUMBER_OF_OBJECTS = 100;
+        double xRand[] = new double[NUMBER_OF_OBJECTS];
+        double yRand[] = new double[NUMBER_OF_OBJECTS];
+        double zRand[] = new double[NUMBER_OF_OBJECTS];
+        double xRandA[] = new double[NUMBER_OF_OBJECTS];
+        double yRandA[] = new double[NUMBER_OF_OBJECTS];
+        double zRandA[] = new double[NUMBER_OF_OBJECTS];
+        public Asteroid asteroids[] = new Asteroid[100];
+        public AlienShip alienShips[] = new AlienShip[100];
         double earthRotations = 0;
         
 	public static void main (final String[] args){
@@ -119,7 +116,7 @@ public class PlanetDefense extends JFrame implements GLEventListener {
         
         public double randomNum(double min, double max){
             Random rand =  new Random();
-            double randomNumber = rand.nextDouble()*max + min;
+            double randomNumber = min + rand.nextDouble()*max - max/2;
             System.out.println(randomNumber);
             return randomNumber;
         }
@@ -139,82 +136,48 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 		gl.glPushMatrix();
 
 		// draw planet
-        GLUquadric SOLID = glu.gluNewQuadric();
-        GLUquadric stars = glu.gluNewQuadric();
-        glu.gluQuadricDrawStyle(stars, GLU.GLU_POINT);
-        glu.gluQuadricDrawStyle( SOLID, GLU.GLU_FILL);
-        //glu.gluQuadricDrawStyle(qobj0, GLU.GLU_FLAT);
-        glu.gluQuadricNormals( SOLID, GLU.GLU_SMOOTH );
+            GLUquadric SOLID = glu.gluNewQuadric();
+            glu.gluQuadricDrawStyle( SOLID, GLU.GLU_FILL);
+            //glu.gluQuadricDrawStyle(qobj0, GLU.GLU_FLAT);
+            glu.gluQuadricNormals( SOLID, GLU.GLU_SMOOTH );
 //                        gl.glColor4f(1, 0, 0, 1);
-        gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(0, 0, 0);
-        gl.glVertex3f(400, 0, 0);
-        gl.glEnd();
-        gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(0, 0, 0);
-        gl.glVertex3f(0, 400, 0);
-        gl.glEnd();
-        gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(0, 0, 0);
-        gl.glVertex3f(0, 0, 400);
-        gl.glEnd();
-        glu.gluQuadricTexture(SOLID, true);
+            gl.glBegin(GL.GL_LINE_LOOP);
+            gl.glVertex3f(0, 0, 0);
+            gl.glVertex3f(400, 0, 0);
+            gl.glEnd();
+            gl.glBegin(GL.GL_LINE_LOOP);
+            gl.glVertex3f(0, 0, 0);
+            gl.glVertex3f(0, 400, 0);
+            gl.glEnd();
+            gl.glBegin(GL.GL_LINE_LOOP);
+            gl.glVertex3f(0, 0, 0);
+            gl.glVertex3f(0, 0, 400);
+            gl.glEnd();
+            glu.gluQuadricTexture(SOLID, true);
 
-        earth.enable(gl);
-        earth.bind(gl);
-                                                    
-        gl.glDisable(GL2.GL_LIGHTING);
-        gl.glPushMatrix();
-        gl.glRotated(earthRotations,0,1,0);
-        glu.gluSphere(SOLID, 100f, 50, 50);
-        
-        gl.glPopMatrix();
-        earth.disable(gl);
-        //glu.gluDeleteQuadric(SOLID);
-        asteroid.display(gl,SOLID,glu,asteroidTexture,asteroidNumber, xRand, yRand);
-        alienShip.display(gl,SOLID,glu,earth,asteroidNumber,xRand1,yRand1);
-        gl.glEnable(GL2.GL_LIGHTING);
-        // draw user spaceship
+            earth.enable(gl);
+            earth.bind(gl);
+            
+            
+            
+            gl.glDisable(GL2.GL_LIGHTING);
+            gl.glPushMatrix();
+            gl.glRotated(earthRotations,0,1,0);
+            glu.gluSphere(SOLID, 100f, 50, 50);
+            gl.glPopMatrix();
+            earth.disable(gl);
+            Starscape.display(gl,SOLID, glu, starTexture);
+
+            for(int i = 0; i < NUMBER_OF_OBJECTS; i++){
+                asteroids[i].display(gl, SOLID, glu, asteroidTexture, xRand[i], yRand[i], zRand[i]);
+                alienShips[i].display(gl, SOLID, glu, asteroidTexture, xRandA[i], yRandA[i], zRandA[i]);
+            }
+            gl.glEnable(GL2.GL_LIGHTING);
+
 	
-        user.display(gl);
+            user.display(gl);
                  
 
-//                        gl.glTranslatef(FORWARD, LEFT, RIGHT);
-//                        //glu.gluSphere(qobj0, 5, 100, 100);
-//                        gl.glPushMatrix();
-//                        gl.glRotated(90, 1, 0, 0);
-//                        gl.glRotated(-90, 0, 1, 0);
-//                        gl.glPushMatrix();
-//                        gl.glTranslatef(0,0,8);
-//                        glu.gluCylinder(SOLID, 5, 5, 15, 10, 10);
-//                        gl.glTranslatef(0, 0, 15);
-//                        glu.gluDisk(SOLID, 0, 5, 10, 10);
-//                        gl.glPushMatrix();
-//                        //gl.glTranslatef(10,0,0);
-//                        gl.glBegin(GL.GL_TRIANGLES);        // Drawing Using Triangles
-//                        gl.glVertex3f(0.0f, -15.0f, 0.0f);
-//                        gl.glVertex3f(0.0f, 0.0f, -22.0f);
-//                        gl.glVertex3f(0.0f, 15.0f, 10.0f);
-//                        /*
-//                        gl.glVertex3f(-1.0f, -15.0f, 0.0f);
-//                        gl.glVertex3f(0.0f, 0.0f, -22.0f);
-//                        gl.glVertex3f(-1.0f, 15.0f, 0.0f);
-//
-//                        gl.glVertex3f(-1.0f, -15.0f, 0.0f);
-//                        gl.glVertex3f(0.0f, 0.0f, -22.0f);
-//                        gl.glVertex3f(1.0f, -15.0f, 0.0f);
-//
-//                        gl.glVertex3f(-1.0f, 15.0f, 0.0f);
-//                        gl.glVertex3f(0.0f, 0.0f, -22.0f);
-//                        gl.glVertex3f(1.0f, 15.0f, 0.0f);
-//                        */
-//
-//                        gl.glEnd();                         // Finished Drawing The Triangle
-//                        gl.glPopMatrix();
-//                        gl.glPopMatrix();
-//
-//                        glu.gluCylinder(SOLID, 0, 5, 8, 10, 10);
-//                        gl.glPopMatrix();
 
 		gl.glPopMatrix();
 		glDrawable.swapBuffers();
@@ -249,13 +212,17 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 	private void update() {
                 gameTime += 1;
 		user.update(0);
-                asteroid.update(0);
-                alienShip.update(0);
+                //alienShip.update(0);
                 //System.out.println(gameTime);
                 earthRotations += .03125;
                 if(gameTime % 100 == 0){
-                    asteroidNumber += 1;
+                    
                 }
+                for(int i = 0; i<NUMBER_OF_OBJECTS; i++){
+                    asteroids[i].update(0);
+                    alienShips[i].update(0);
+                }
+                Starscape.Update(0);
 	}
 
 	public void displayChanged(final GLAutoDrawable glDrawable, final boolean modeChanged, final boolean deviceChanged){
@@ -280,6 +247,7 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 	@Override
 	public void init(final GLAutoDrawable glDrawable) {
 		glu = new GLU();
+                
 
 		final GL2 gl = glDrawable.getGL().getGL2();
 		gl.glShadeModel(GL2.GL_FLAT);
@@ -296,9 +264,21 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 
 		gl.glPointSize(1.0f);
 		gl.glLineWidth(1.0f);
-                asteroid = new Asteroid(gl);
+                for(int i = 0; i < NUMBER_OF_OBJECTS; i++){
+                    xRand[i] = randomNum(0,600);//-300,300);
+                    yRand[i] = randomNum(0,600);//-200,200);
+                    zRand[i] = randomNum(700, 1000);
+                    xRandA[i] = randomNum(0,600);
+                    yRandA[i] = randomNum(0,600);
+                    zRandA[i] = randomNum(800, 1000);
+                    asteroids[i] = new Asteroid(gl, zRand[i]);
+                    alienShips[i] = new AlienShip(gl);
+                    
+                }
+                //asteroid = new Asteroid(gl, 0);
 		user = new UserShip(gl);
-                alienShip = new AlienShip(gl);
+                Starscape = new StarScape(gl);
+                //alienShip = new AlienShip(gl);
 		this.getContentPane().getComponent(0).addKeyListener(user);
 		this.getContentPane().getComponent(0).addMouseListener(user);
 		this.getContentPane().getComponent(0).requestFocus();
@@ -314,6 +294,13 @@ public class PlanetDefense extends JFrame implements GLEventListener {
                     stream = getClass().getResourceAsStream("asteroid1.jpg");
                     data = TextureIO.newTextureData(glp, stream, false, "jpg");
                     asteroidTexture = TextureIO.newTexture(data);
+                    stream = getClass().getResourceAsStream("klendathu.png");
+                    data = TextureIO.newTextureData(glp, stream, false, "png");
+                    randomTexture = TextureIO.newTexture(data);
+                    stream = getClass().getResourceAsStream("starscape2.jpg");
+                    data = TextureIO.newTextureData(glp, stream, false, "jpg");
+                    starTexture = TextureIO.newTexture(data);
+                    
 
           }
           catch (IOException e) {
@@ -321,44 +308,6 @@ public class PlanetDefense extends JFrame implements GLEventListener {
           }
 	}
 
-//
-//	private void loadShaders(final GL2 gl) {
-//		vertexShader = gl.glCreateShader(GL2.GL_VERTEX_SHADER);
-//		fragmentShader = gl.glCreateShader(GL2.GL_FRAGMENT_SHADER);
-//		String vSource = "";
-//		String fSource = "";
-//		try {
-//			final BufferedReader vBuff = new BufferedReader(new FileReader("vertex.glsl"));
-//			String vLine;
-//			while((vLine = vBuff.readLine()) != null){
-//				vSource += vLine + "\n";
-//			}
-//
-//			final BufferedReader fBuff = new BufferedReader(new FileReader("fragment.glsl"));
-//			String fLine;
-//			while((fLine = fBuff.readLine()) != null){
-//				fSource += fLine + "\n";
-//			}
-//		} catch (final Exception e) {
-//			e.printStackTrace();
-//		}
-//		// compile vertex shader
-//		gl.glShaderSource(vertexShader, 1, new String[]{vSource}, (int[])null, 0);
-//		gl.glCompileShader(vertexShader);
-//		// compile fragment shader
-//		gl.glShaderSource(fragmentShader, 1, new String[]{fSource}, (int[])null, 0);
-//		gl.glCompileShader(fragmentShader);
-//
-//		// create shader program
-//		final int shaderprogram = gl.glCreateProgram();
-//		// attach shaders
-//		gl.glAttachShader(shaderprogram, vertexShader);
-//		gl.glAttachShader(shaderprogram, fragmentShader);
-//
-//		gl.glLinkProgram(shaderprogram);
-//		gl.glValidateProgram(shaderprogram);
-//		gl.glUseProgram(shaderprogram);
-//	}
 
 	private double[] normalize(final double[] vector) {
 		final double magnitude = Math.sqrt(vector[0]*vector[0] + vector[1]*vector[1] + vector[2]*vector[2]);
