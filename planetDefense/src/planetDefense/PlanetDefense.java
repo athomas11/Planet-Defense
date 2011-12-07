@@ -51,6 +51,7 @@ import java.io.*;
 
 import java.applet.*;
 import java.net.*;
+import javax.sound.sampled.*;
 
 import sun.audio.*;
 
@@ -98,6 +99,8 @@ public class PlanetDefense extends JFrame implements GLEventListener {
         public AlienShip alienShips[] = new AlienShip[NUMBER_OF_ALIENSHIPS];
         double earthRotations = 0;
         GLUT glut = new GLUT();
+        public Clip clip1;
+        public Clip clip2;
         
 	public static void main (final String[] args){
 		final PlanetDefense app = new PlanetDefense();
@@ -243,6 +246,7 @@ public class PlanetDefense extends JFrame implements GLEventListener {
                         asteroids[i].update(0);
                         ph++;
                         System.out.println(ph);
+                        
                     }}
                 }
                 if(gameTime > 15){
@@ -519,9 +523,30 @@ public class PlanetDefense extends JFrame implements GLEventListener {
           }
           catch (IOException e) {
             javax.swing.JOptionPane.showMessageDialog(null, e);
-          }
-        
-            
+          }     
+           try{
+               InputStream stream1 = getClass().getResourceAsStream("ambient1.wav");
+               AudioInputStream audio1 = AudioSystem.getAudioInputStream(stream1);
+               clip1 = AudioSystem.getClip();
+               clip1.open(audio1);
+               //clip1.start();
+               clip1.loop(1000);
+               stream1 = getClass().getResourceAsStream("laserCannon.wav");
+               AudioInputStream audio2 = AudioSystem.getAudioInputStream(stream1);
+               clip2 = AudioSystem.getClip();
+               clip2.open(audio2);
+               //
+               //Do clip2.start(); when ever you fire a missile
+               //
+               //
+               
+           } catch(IOException e){
+              System.out.println(e); 
+           } catch(UnsupportedAudioFileException uae){
+               System.out.println(uae);
+           } catch(LineUnavailableException lae){
+               System.out.println(lae);
+           }
         
         
 	}
