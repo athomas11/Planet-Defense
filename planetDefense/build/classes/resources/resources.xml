@@ -3,6 +3,8 @@
     <image>
         <src>quom.png</src>
     </image>
-    
+    <image>
+        <src>SplashScreen.png</src>
+    </image>
       
 </resources>

@@ -2,13 +2,17 @@
  * 
  */
 package planetDefense.objects;
+import planetDefense.PlanetDefense;
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.EventListener;
 import java.util.Vector;
+import java.io.*;
+import com.jogamp.opengl.util.gl2.GLUT;
 
 import javax.media.opengl.GL2;
 
@@ -19,7 +23,7 @@ public class UserShip extends GameObject implements KeyListener, MouseListener{
 	private static final double ROTATE_DELTA = 0.05;
 	private static final double ACCELERATION = 0.3;
 	
-	private static final double[] START_POS = {0, 0, 500};
+	private static final double[] START_POS = {0, 0, 300};
 
     private final float[] materialAmbient = {0.6f, 0.6f, 1.0f, 1.0f};
     private final float[] materialDiffuse = {0.2f, 0.2f, 0.3f, 1.0f};
@@ -376,7 +380,19 @@ public class UserShip extends GameObject implements KeyListener, MouseListener{
 	public void display(GL2 gl){
 		gl.glPushMatrix();
 		gl.glTranslated(position[0], position[1], position[2]);
+                
+                //gl.glPushMatrix();
+                GLUT glut = new GLUT();
+                Font font = new Font("SansSerif", Font.BOLD, 24);
+                //gl.glTranslatef(0,0,0);
+                
+                
+                //gl.glPopMatrix();
+                
+                
 		gl.glRotated(rotateY*180/Math.PI, yawAxis[0], yawAxis[1], yawAxis[2]);
+                gl.glRasterPos3d(1.7,1.1,0);
+                glut.glutBitmapString(GLUT.BITMAP_TIMES_ROMAN_24, "Score: " + planetDefense.PlanetDefense.score);
 //		gl.glRotated(rotateX*180/Math.PI, pitchAxis[0], pitchAxis[1], pitchAxis[2]);
 //		rotateY(gl);
 //		rotateX(gl);

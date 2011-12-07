@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
-
+import java.io.*;
+import java.awt.*;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
@@ -45,7 +46,13 @@ import com.jogamp.opengl.util.texture.TextureIO;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.*;
 import com.jogamp.opengl.util.texture.spi.awt.IIOTextureProvider;
+import com.jogamp.opengl.util.gl2.GLUT;
+import java.io.*;
 
+import java.applet.*;
+import java.net.*;
+
+import sun.audio.*;
 
 
 public class PlanetDefense extends JFrame implements GLEventListener {
@@ -53,7 +60,7 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 	private static final long serialVersionUID = 1L;
 	private static final double CAM_BEHIND_SCALAR = 3;
 	private static final double CAM_ABOVE_SCALAR = 1;
-
+        public static int score;
 	// FPSAnimator performs animation by repeatedly calling
 	// the display method
 	private FPSAnimator animator;
@@ -79,7 +86,7 @@ public class PlanetDefense extends JFrame implements GLEventListener {
         private AlienShip alienShip;
         public int asteroidNumber = 1;
         public double gameTime = 0;
-        public int NUMBER_OF_ALIENSHIPS = 100;
+        public int NUMBER_OF_ALIENSHIPS = 30;
         public int NUMBER_OF_ASTEROIDS = 200;
         double xRand[] = new double[NUMBER_OF_ASTEROIDS];
         double yRand[] = new double[NUMBER_OF_ASTEROIDS];
@@ -90,6 +97,7 @@ public class PlanetDefense extends JFrame implements GLEventListener {
         public Asteroid asteroids[] = new Asteroid[NUMBER_OF_ASTEROIDS];
         public AlienShip alienShips[] = new AlienShip[NUMBER_OF_ALIENSHIPS];
         double earthRotations = 0;
+        GLUT glut = new GLUT();
         
 	public static void main (final String[] args){
 		final PlanetDefense app = new PlanetDefense();
@@ -161,7 +169,7 @@ public class PlanetDefense extends JFrame implements GLEventListener {
             earth.enable(gl);
             earth.bind(gl);
             
-            
+                
             
             gl.glDisable(GL2.GL_LIGHTING);
             gl.glPushMatrix();
@@ -169,8 +177,8 @@ public class PlanetDefense extends JFrame implements GLEventListener {
             glu.gluSphere(SOLID, 100f, 50, 50);
             gl.glPopMatrix();
             earth.disable(gl);
-            Starscape.display(gl,SOLID, glu, starTexture);
-            //StarscapeCube.display(gl,SOLID,glu,starTexture);
+            //Starscape.display(gl,SOLID, glu, starTexture);
+            StarscapeCube.display(gl,SOLID,glu,starTexture);
             //if(GameStarted){
             for(int i = 0; i < NUMBER_OF_ASTEROIDS; i++){
                 asteroids[i].display(gl, SOLID, glu, asteroidTexture, xRand[i], yRand[i], zRand[i]);
@@ -185,6 +193,8 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 
             
             user.display(gl);
+            
+            
                  
 
 
@@ -219,24 +229,207 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 	 *
 	 */
 	private void update() {
-                gameTime += 1;
+                if(GameStarted){
+                    gameTime += .03125;
+                }
 		user.update(0);
                 //alienShip.update(0);
                 //System.out.println(gameTime);
                 earthRotations += .03125;
-                if(gameTime % 100 == 0){
-                    
+                int ph = 0;
+                if(gameTime > 5){
+                    if(GameStarted){
+                        for(int i = 0; i<NUMBER_OF_ASTEROIDS*1/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
                 }
+                if(gameTime > 15){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*2/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 25){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*3/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 35){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*4/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 45){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*5/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 55){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*6/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 65){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*7/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 75){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*8/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 85){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*9/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 95){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*10/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 105){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*11/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 115){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*12/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 125){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*13/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 135){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*14/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 145){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*15/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 155){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*16/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 165){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*17/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 175){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*18/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+                if(gameTime > 185){
+                    if(GameStarted){
+                        for(int i = ph; i<NUMBER_OF_ASTEROIDS*19/40; i++){
+                        asteroids[i].update(0);
+                        ph++;
+                        System.out.println(ph);
+                    }}
+                }
+               
+                int ph2 = 0;
+                if(gameTime > 10){
+                    if(GameStarted){
+                        for(int i = 0; i<NUMBER_OF_ALIENSHIPS/6; i++){
+                            alienShips[i].update(0);
+                            ph2++;
+                        }
+                    }
+                }
+                if(gameTime > 25){
+                    if(GameStarted){
+                        for(int i = ph2; i<NUMBER_OF_ALIENSHIPS/6; i++){
+                            alienShips[i].update(0);
+                            ph2++;
+                        }
+                    }
+                }
+                if(gameTime > 40){
+                    if(GameStarted){
+                        for(int i = ph2; i<NUMBER_OF_ALIENSHIPS/6; i++){
+                            alienShips[i].update(0);
+                            ph2++;
+                        }
+                    }
+                }
+                
+                /*
                 if(GameStarted){
                 for(int i = 0; i<NUMBER_OF_ASTEROIDS; i++){
                     asteroids[i].update(0);
                 }}
+                *//*
                 if(GameStarted){
                 for(int i = 0; i<NUMBER_OF_ALIENSHIPS; i++){
                     alienShips[i].update(0);
                 }}
+                */
                 Starscape.Update(0);
                 StarscapeCube.Update(0);
+                //score += 1;
 	}
 
 	public void displayChanged(final GLAutoDrawable glDrawable, final boolean modeChanged, final boolean deviceChanged){
@@ -261,6 +454,7 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 	@Override
 	public void init(final GLAutoDrawable glDrawable) {
 		glu = new GLU();
+                score = 0;
                 
 
 		final GL2 gl = glDrawable.getGL().getGL2();
@@ -280,15 +474,15 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 		gl.glLineWidth(1.0f);
                 //if(GameStarted){
                 for(int i = 0; i < NUMBER_OF_ASTEROIDS; i++){
-                    xRand[i] = randomNum(0,400);//-300,300);
+                    xRand[i] = randomNum(0,300);//-300,300);
                     yRand[i] = randomNum(0,300);//-200,200);
                     zRand[i] = randomNum(700, 1200);
                     asteroids[i] = new Asteroid(gl, zRand[i]);
                 }//}
                 //if(GameStarted){
                 for(int i = 0; i < NUMBER_OF_ALIENSHIPS; i++){
-                    xRandA[i] = randomNum(0,400);
-                    yRandA[i] = randomNum(0,300);
+                    xRandA[i] = randomNum(0,200);
+                    yRandA[i] = randomNum(0,200);
                     zRandA[i] = randomNum(800, 1000);
                     alienShips[i] = new AlienShip(gl);
                     
@@ -304,10 +498,8 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 		this.getContentPane().getComponent(0).requestFocus();
 
         try {
-//        	ImageResource imgRes= ResourceFactory.getFactory().getFrames("resources/quom.png").get(0);
-//        	URL url = getClass().getResource("resources/quom.png");
-//        	System.out.println(url.getPath());
-            //earth = TextureIO.newTexture(new File("resources/quom.png"), false);
+
+                    
                     InputStream stream = getClass().getResourceAsStream("planet2.jpg");
                     TextureData data = TextureIO.newTextureData(glp, stream, false, "jpg");
                     earth = TextureIO.newTexture(data);
@@ -321,11 +513,17 @@ public class PlanetDefense extends JFrame implements GLEventListener {
                     data = TextureIO.newTextureData(glp, stream, false, "jpg");
                     starTexture = TextureIO.newTexture(data);
                     
+                    
+                    
 
           }
           catch (IOException e) {
             javax.swing.JOptionPane.showMessageDialog(null, e);
           }
+        
+            
+        
+        
 	}
 
 
@@ -358,7 +556,14 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 
 
 	private void run() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                /*
+                final SplashScreen splash = SplashScreen.getSplashScreen();
+                if(splash == null){
+                    System.out.println("Splash Screen Failed To Load.");
+                }*/
+                
+            
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		final GLProfile prof = GLProfile.get(GLProfile.GL2);
 		final GLCapabilities glcaps = new GLCapabilities(prof);
 		glcaps.setDoubleBuffered(true);
@@ -367,8 +572,9 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 		final GLCanvas glcanvas = new GLCanvas(glcaps);
 		glcanvas.addGLEventListener(this);
 //		glcanvas.setSize(width, height);
-
+                
 		this.getContentPane().add(glcanvas, BorderLayout.CENTER);
+                //this.getContentPane().add(score, BorderLayout.NORTH); 
 //		setSize(800, 800);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		centerWindow(this);

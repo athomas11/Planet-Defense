@@ -33,7 +33,7 @@ public class AlienShip extends GameObject {
         public double randomNum(double min, double max){
             Random rand =  new Random();
             double randomNumber = min + rand.nextDouble()*max - max/2;
-            System.out.println(randomNumber);
+            //System.out.println(randomNumber);
             return randomNumber;
         }
         public double placement = randomNum(700,1000);

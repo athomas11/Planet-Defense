@@ -37,7 +37,7 @@ public abstract class GameObject {
 	
 	int health;
 	int damage;
-
+        
 	
 	
 
