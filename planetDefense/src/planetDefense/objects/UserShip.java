@@ -196,6 +196,12 @@ public class UserShip extends GameObject implements KeyListener, MouseListener{
 		case(KeyEvent.VK_D):
 			rightKeyPressed = isPressed;
 			break;
+
+                case(KeyEvent.VK_W):
+                        thrust = isPressed;
+                        break;
+                case(KeyEvent.VK_ENTER):
+                        planetDefense.PlanetDefense.GameStarted = true;
 //		case(KeyEvent.VK_W):
 //			upKeyPressed = isPressed;
 //			break;

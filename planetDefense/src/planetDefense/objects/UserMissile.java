@@ -16,7 +16,7 @@ public class UserMissile extends GameObject {
     }
     
     public void display(GL2 gl,GLUquadric SOLID,GLU glu,Texture alienTexture){
-         
+            
     }
     
     public void Update(long delta){

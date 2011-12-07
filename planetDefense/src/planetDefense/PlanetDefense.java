@@ -72,20 +72,23 @@ public class PlanetDefense extends JFrame implements GLEventListener {
         private Texture randomTexture;
         private Texture starTexture;
         private StarScape Starscape;
+        private StarScapeCube StarscapeCube;
         GLProfile glp = GLProfile.getDefault();
+        public static Boolean GameStarted = false;
         //private Asteroid asteroid;
         private AlienShip alienShip;
         public int asteroidNumber = 1;
         public double gameTime = 0;
-        public int NUMBER_OF_OBJECTS = 100;
-        double xRand[] = new double[NUMBER_OF_OBJECTS];
-        double yRand[] = new double[NUMBER_OF_OBJECTS];
-        double zRand[] = new double[NUMBER_OF_OBJECTS];
-        double xRandA[] = new double[NUMBER_OF_OBJECTS];
-        double yRandA[] = new double[NUMBER_OF_OBJECTS];
-        double zRandA[] = new double[NUMBER_OF_OBJECTS];
-        public Asteroid asteroids[] = new Asteroid[100];
-        public AlienShip alienShips[] = new AlienShip[100];
+        public int NUMBER_OF_ALIENSHIPS = 100;
+        public int NUMBER_OF_ASTEROIDS = 200;
+        double xRand[] = new double[NUMBER_OF_ASTEROIDS];
+        double yRand[] = new double[NUMBER_OF_ASTEROIDS];
+        double zRand[] = new double[NUMBER_OF_ASTEROIDS];
+        double xRandA[] = new double[NUMBER_OF_ALIENSHIPS];
+        double yRandA[] = new double[NUMBER_OF_ALIENSHIPS];
+        double zRandA[] = new double[NUMBER_OF_ALIENSHIPS];
+        public Asteroid asteroids[] = new Asteroid[NUMBER_OF_ASTEROIDS];
+        public AlienShip alienShips[] = new AlienShip[NUMBER_OF_ALIENSHIPS];
         double earthRotations = 0;
         
 	public static void main (final String[] args){
@@ -117,7 +120,7 @@ public class PlanetDefense extends JFrame implements GLEventListener {
         public double randomNum(double min, double max){
             Random rand =  new Random();
             double randomNumber = min + rand.nextDouble()*max - max/2;
-            System.out.println(randomNumber);
+            //System.out.println(randomNumber);
             return randomNumber;
         }
 
@@ -167,14 +170,20 @@ public class PlanetDefense extends JFrame implements GLEventListener {
             gl.glPopMatrix();
             earth.disable(gl);
             Starscape.display(gl,SOLID, glu, starTexture);
-
-            for(int i = 0; i < NUMBER_OF_OBJECTS; i++){
+            //StarscapeCube.display(gl,SOLID,glu,starTexture);
+            //if(GameStarted){
+            for(int i = 0; i < NUMBER_OF_ASTEROIDS; i++){
                 asteroids[i].display(gl, SOLID, glu, asteroidTexture, xRand[i], yRand[i], zRand[i]);
+                
+            }//}
+            //if(GameStarted){
+            for(int i = 0; i < NUMBER_OF_ALIENSHIPS; i++){
                 alienShips[i].display(gl, SOLID, glu, asteroidTexture, xRandA[i], yRandA[i], zRandA[i]);
-            }
+            }//}
+            
             gl.glEnable(GL2.GL_LIGHTING);
 
-	
+            
             user.display(gl);
                  
 
@@ -218,11 +227,16 @@ public class PlanetDefense extends JFrame implements GLEventListener {
                 if(gameTime % 100 == 0){
                     
                 }
-                for(int i = 0; i<NUMBER_OF_OBJECTS; i++){
+                if(GameStarted){
+                for(int i = 0; i<NUMBER_OF_ASTEROIDS; i++){
                     asteroids[i].update(0);
+                }}
+                if(GameStarted){
+                for(int i = 0; i<NUMBER_OF_ALIENSHIPS; i++){
                     alienShips[i].update(0);
-                }
+                }}
                 Starscape.Update(0);
+                StarscapeCube.Update(0);
 	}
 
 	public void displayChanged(final GLAutoDrawable glDrawable, final boolean modeChanged, final boolean deviceChanged){
@@ -264,20 +278,26 @@ public class PlanetDefense extends JFrame implements GLEventListener {
 
 		gl.glPointSize(1.0f);
 		gl.glLineWidth(1.0f);
-                for(int i = 0; i < NUMBER_OF_OBJECTS; i++){
-                    xRand[i] = randomNum(0,600);//-300,300);
-                    yRand[i] = randomNum(0,600);//-200,200);
-                    zRand[i] = randomNum(700, 1000);
-                    xRandA[i] = randomNum(0,600);
-                    yRandA[i] = randomNum(0,600);
-                    zRandA[i] = randomNum(800, 1000);
+                //if(GameStarted){
+                for(int i = 0; i < NUMBER_OF_ASTEROIDS; i++){
+                    xRand[i] = randomNum(0,400);//-300,300);
+                    yRand[i] = randomNum(0,300);//-200,200);
+                    zRand[i] = randomNum(700, 1200);
                     asteroids[i] = new Asteroid(gl, zRand[i]);
+                }//}
+                //if(GameStarted){
+                for(int i = 0; i < NUMBER_OF_ALIENSHIPS; i++){
+                    xRandA[i] = randomNum(0,400);
+                    yRandA[i] = randomNum(0,300);
+                    zRandA[i] = randomNum(800, 1000);
                     alienShips[i] = new AlienShip(gl);
                     
                 }
+                //}
                 //asteroid = new Asteroid(gl, 0);
 		user = new UserShip(gl);
                 Starscape = new StarScape(gl);
+                StarscapeCube = new StarScapeCube(gl);
                 //alienShip = new AlienShip(gl);
 		this.getContentPane().getComponent(0).addKeyListener(user);
 		this.getContentPane().getComponent(0).addMouseListener(user);

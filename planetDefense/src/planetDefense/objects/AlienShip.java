@@ -106,7 +106,7 @@ public class AlienShip extends GameObject {
         }
         public void update(long delta){
             
-                placement -= 1;
+                placement -= 2;
                 gameTime += .0625;
                 if(placement <= -1000){
                     placement = zPosition;
